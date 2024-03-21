@@ -1,26 +1,43 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+    <header>
+      <h1>{{ sitename }}</h1>
+      <button @click="showCheckout">{{ this.cart.length }}Checkout</button>
+    </header>
+    <main>
+      <product-list @addProduct="addToCart" v-if="showLesson"></product-list>
+      <checkout :cart="cart" @remove-item="removeFromCart" v-else></checkout>
+    </main>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+import productList from './components/ProductList.vue';
+import checkout from './components/Form.vue';
+export default{
+  components: { 
+    productList, checkout
+  },
+  name: "App",
+  data(){
+    return{
+      sitename: "Vue.js Pet Depot",
+      cart: [],
+      showLesson: true
+    }
+  },
+  methods: {
+    showCheckout(){
+      this.showLesson = this.showLesson ? false : true;
+    },
+    addToCart(product){
+      console.log("addProduct event received by the root component.");
+      this.cart.push(product);
+    },
+    removeFromCart(index){
+      console.log("remove-item event received by the root component.");
+      this.cart.splice(index, 1);
+    }
+  },
+};
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
